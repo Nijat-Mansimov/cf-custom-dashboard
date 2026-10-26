@@ -1,0 +1,6 @@
+{
+  "name": "Cloudflare Live Monitoring SOC Wall",
+  "description": "SOC video wall dashboard for live Cloudflare telemetry with dual-screen bezel alignment, high-density telemetry, and real-time zone monitoring.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,206 @@
+/**
+ * Dashboard Page Layout (Stacked Screen Video Wall)
+ * Strictly separates top screen zone and bottom screen zone across 50% seam.
+ */
+
+/* Top Screen Zone Content Layout */
+.dashboard-top-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 8px;
+}
+
+.dashboard-top-grid {
+  display: grid;
+  grid-template-columns: 280px 240px 1fr;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.dashboard-top-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Bottom Screen Zone Content Layout */
+.dashboard-bottom-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 8px;
+}
+
+.dashboard-main-grid-wrap {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+
+.dashboard-main-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+}
+
+@media (max-width: 1400px) {
+  .dashboard-main-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-main-grid-wrap {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-main-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Quick Stat Column on the Right (matches the vertical right column in reference image) */
+.dashboard-quick-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+}
+
+.stat-tile {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-card);
+  flex: 1;
+  min-height: 0;
+}
+
+.stat-tile-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-size-micro);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.stat-tile-val {
+  font-family: var(--font-mono);
+  font-size: var(--text-size-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.stat-tile-val--amber {
+  color: var(--accent-amber);
+}
+
+.stat-tile-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+/* Bottom Pagination & Auto-Cycle Bar */
+.dashboard-pagination {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pagination-page-info {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.06em;
+}
+
+.pagination-cycle-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cycle-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cycle-track {
+  width: 90px;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.cycle-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background-color: var(--accent-amber);
+  box-shadow: 0 0 6px var(--accent-amber);
+  transition: width 0.1s linear;
+}

@@ -1,0 +1,328 @@
+/**
+ * SOC Video Wall Layout & Seam Architecture
+ * Dual stacked 1920x1080 display wall merged into 1920x2160 viewport.
+ * Physical bezel seam at 50% height with configurable gutter.
+ */
+
+/* Root Wall Container: fills 100vh with zero outer scroll */
+.wall-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-canvas);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Screen Zone Top: exactly 50vh minus half gutter */
+.screen-zone {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.screen-zone--top {
+  height: var(--screen-top-height);
+  padding-top: 10px;
+  padding-bottom: 6px;
+}
+
+/* Horizontal Physical Seam Gutter: represents the monitor frames/gap */
+.wall-seam-gutter {
+  height: var(--seam-gutter);
+  width: 100%;
+  background-color: #060608;
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.wall-seam-gutter::after {
+  content: '';
+  width: 120px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Screen Zone Bottom: exactly 50vh minus half gutter */
+.screen-zone--bottom {
+  height: var(--screen-bottom-height);
+  padding-top: 6px;
+  padding-bottom: 12px;
+}
+
+/* Scrollable Container Override for Settings Page */
+.wall-container--scrollable {
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.wall-container--scrollable .screen-zone--top,
+.wall-container--scrollable .screen-zone--bottom {
+  height: auto;
+  overflow: visible;
+}
+
+/* ==========================================================================
+   Header Bar
+   ========================================================================== */
+.soc-header {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-card);
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.header-logo {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 6px rgba(255, 138, 31, 0.4));
+}
+
+.header-logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+.header-title-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-title {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.header-subtitle {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--accent-amber);
+}
+
+/* Header Middle: Telemetry Status & Navigation Tabs */
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.live-beacon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  border-radius: var(--radius-full);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background-color: var(--accent-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-green);
+  animation: live-pulse 2s infinite ease-in-out;
+}
+
+@keyframes live-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 8px var(--accent-green);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+    box-shadow: 0 0 3px var(--accent-green);
+  }
+}
+
+.live-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--accent-green);
+}
+
+/* Nav Tabs */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--bg-card-inset);
+  padding: 3px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.nav-tab {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.nav-tab:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.nav-tab.is-active {
+  color: var(--text-inverse);
+  background-color: var(--accent-amber);
+  box-shadow: 0 0 12px rgba(255, 194, 26, 0.35);
+  font-weight: 700;
+}
+
+/* Header Right: Clock, Updated timestamp, Actions */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.clock-display {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.clock-time {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+.updated-time {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.header-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+.header-btn--danger:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* ==========================================================================
+   Physical Seam Debug Overlay (Toggled via 'G' key)
+   ========================================================================== */
+.seam-debug-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+}
+
+.seam-debug-overlay.is-active {
+  display: block;
+}
+
+.debug-seam-line {
+  position: absolute;
+  top: var(--seam-position);
+  left: 0;
+  width: 100%;
+  height: var(--seam-gutter);
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(239, 68, 68, 0.25),
+    rgba(239, 68, 68, 0.25) 10px,
+    rgba(239, 68, 68, 0.45) 10px,
+    rgba(239, 68, 68, 0.45) 20px
+  );
+  border-top: 1px dashed #EF4444;
+  border-bottom: 1px dashed #EF4444;
+}
+
+.debug-seam-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #EF4444;
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 10px;
+  border-radius: var(--radius-xs);
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloudflare Live Monitoring — SOC Video Wall</title>
+  <meta name="description" content="SOC video wall dashboard for live Cloudflare telemetry with split-screen bezel alignment, high-density telemetry, and real-time zone monitoring.">
+  <meta property="og:title" content="Cloudflare Live Monitoring — SOC Video Wall">
+  <meta property="og:description" content="SOC video wall dashboard for live Cloudflare telemetry with split-screen bezel alignment, high-density telemetry, and real-time zone monitoring.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Core Tokens & Layout Styles -->
+  <link rel="stylesheet" href="/styles/tokens.css">
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/layout.css">
+
+  <!-- Component Styles -->
+  <link rel="stylesheet" href="/styles/components/card.css">
+  <link rel="stylesheet" href="/styles/components/chart-card.css">
+  <link rel="stylesheet" href="/styles/components/kpi.css">
+  <link rel="stylesheet" href="/styles/components/gauge.css">
+  <link rel="stylesheet" href="/styles/components/table.css">
+  <link rel="stylesheet" href="/styles/components/button.css">
+  <link rel="stylesheet" href="/styles/components/form.css">
+  <link rel="stylesheet" href="/styles/components/loader.css">
+  <link rel="stylesheet" href="/styles/components/badge.css">
+  <link rel="stylesheet" href="/styles/components/empty-state.css">
+
+  <!-- Page Styles -->
+  <link rel="stylesheet" href="/styles/pages/dashboard.css">
+  <link rel="stylesheet" href="/styles/pages/subdomains.css">
+  <link rel="stylesheet" href="/styles/pages/settings.css">
+</head>
+<body>
+
+  <!-- Initial Splash Screen (First visit per browser session) -->
+  <div id="splash-overlay" class="splash-overlay">
+    <div class="splash-logo">
+      <img src="/assets/logo.svg" alt="Cloudflare SOC Flame" width="64" height="64">
+    </div>
+    <h1 class="splash-title">CLOUDFLARE MONITORING</h1>
+    <span class="splash-subtitle">SECURITY OPERATIONS CENTER // DUAL-WALL</span>
+    <div class="splash-bar-wrap">
+      <div id="splash-bar-fill" class="splash-bar-fill"></div>
+    </div>
+  </div>
+
+  <!-- Physical Seam Debug Overlay (Toggled via 'G' key or header icon) -->
+  <div id="seam-debug-overlay" class="seam-debug-overlay">
+    <div class="debug-seam-line">
+      <span class="debug-seam-badge">BEZEL SEAM (Y = 50% // 1080PX SPLIT)</span>
+    </div>
+  </div>
+
+  <!-- Tab Route Transition Loader -->
+  <div id="tab-loader" class="tab-loader">
+    <div class="tab-loader-spinner"></div>
+    <span class="tab-loader-text">SYNCHRONIZING TELEMETRY...</span>
+  </div>
+
+  <!-- Global Video Wall Shell -->
+  <div id="app-main" class="wall-container">
+    <!-- Top Bar Header (Mounted at top of wall view) -->
+  </div>
+
+  <!-- Global Header Template: persistent in DOM -->
+  <header id="global-header" class="soc-header" style="position: absolute; top: 10px; left: 16px; right: 16px; z-index: 60;">
+    <!-- Brand Zone -->
+    <a href="/" class="header-brand" data-route>
+      <div class="header-logo">
+        <img src="/assets/logo.svg" alt="Cloudflare flame" width="28" height="28">
+      </div>
+      <div class="header-title-block">
+        <span class="header-title">CLOUDFLARE</span>
+        <span class="header-subtitle">LIVE MONITORING // SOC</span>
+      </div>
+    </a>
+
+    <!-- Center Nav & Telemetry Status -->
+    <div class="header-center">
+      <div class="live-beacon">
+        <div class="live-dot"></div>
+        <span class="live-text">LIVE</span>
+      </div>
+
+      <nav class="header-nav" aria-label="Main Navigation">
+        <a href="/" class="nav-tab is-active" data-route>DASHBOARD</a>
+        <a href="/subdomains" class="nav-tab" data-route>SUBDOMAINS</a>
+        <a href="/settings" class="nav-tab" data-route>SETTINGS</a>
+      </nav>
+    </div>
+
+    <!-- Right Controls: Live Clock, Refresh Time, Seam Guide, Logout -->
+    <div class="header-right">
+      <div class="clock-display">
+        <span id="live-clock" class="clock-time font-mono">00:00:00</span>
+        <span id="header-updated-time" class="updated-time font-mono">UPDATED --:--:--</span>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" id="seam-debug-toggle" class="header-btn" title="Toggle Bezel Seam Overlay (Shortcut: G)">
+          <i data-lucide="grid" style="width: 14px; height: 14px;"></i>
+          <span>SEAM</span>
+        </button>
+        <button type="button" id="logout-btn" class="header-btn header-btn--danger" title="Terminate Session">
+          <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
+          <span>LOGOUT</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Vendor Libraries (Offline Local Files) -->
+  <script src="/scripts/vendor/chart.umd.min.js"></script>
+  <script src="/scripts/vendor/lucide.min.js"></script>
+
+  <!-- Native ES Module Application Entry -->
+  <script type="module" src="/scripts/main.js"></script>
+</body>
+</html>

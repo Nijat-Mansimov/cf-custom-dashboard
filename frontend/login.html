@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Cloudflare SOC Live Monitoring</title>
+  <meta name="description" content="Security Operations Center Authentication">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Fully self-contained CSS (no /styles/ references to bypass auth redirects) -->
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    :root {
+      --bg-canvas: #09090b;
+      --bg-card: #131317;
+      --bg-card-elevated: #18181e;
+      --bg-input: #101014;
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-medium: rgba(255, 255, 255, 0.14);
+      --accent-amber: #FFC21A;
+      --accent-amber-glow: rgba(255, 194, 26, 0.35);
+      --accent-orange: #FF8A1F;
+      --accent-green: #22C55E;
+      --accent-red: #EF4444;
+      --text-primary: #F3F4F6;
+      --text-secondary: #9CA3AF;
+      --text-muted: #6B7280;
+      --text-inverse: #0A0A0C;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    /* Two-Screen Wall Safe Box: Centered strictly inside the top 50vh to avoid the seam */
+    .login-container {
+      width: 100%;
+      max-width: 920px;
+      margin: auto;
+      padding: 24px;
+      /* On tall dual-monitor SOC wall (2160px height), anchor safely inside top screen half */
+      transform: translateY(-4vh);
+    }
+    .login-panel {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: 0 12px 40px -4px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+    @media (max-width: 768px) {
+      .login-panel {
+        grid-template-columns: 1fr;
+      }
+      .login-branding {
+        display: none !important;
+      }
+    }
+    /* Left: Branding & Telemetry Status */
+    .login-branding {
+      padding: 36px 32px;
+      background: linear-gradient(145deg, #16161c, #0e0e12);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .branding-top {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .branding-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+    .brand-subtitle {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--accent-amber);
+    }
+    .branding-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+    .branding-telemetry {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .telemetry-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+    }
+    .telemetry-val {
+      color: var(--accent-amber);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    /* Right: Sign-in Form */
+    .login-form-side {
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .form-title {
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .form-desc {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .form-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+    }
+    .form-input {
+      background-color: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.15s ease;
+    }
+    .form-input:focus {
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 12px rgba(255, 194, 26, 0.25);
+    }
+    .login-btn {
+      margin-top: 8px;
+      background-color: var(--accent-amber);
+      color: var(--text-inverse);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(255, 194, 26, 0.3);
+      transition: all 0.15s ease;
+    }
+    .login-btn:hover {
+      background-color: #FFCF40;
+      box-shadow: 0 6px 22px rgba(255, 194, 26, 0.45);
+    }
+    .login-btn:active {
+      transform: translateY(1px);
+    }
+    .login-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .login-error {
+      margin-top: 14px;
+      padding: 8px 12px;
+      background-color: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-red);
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      border-top-color: #000000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-panel">
+      <!-- Left: Brand Presentation -->
+      <div class="login-branding">
+        <div class="branding-top">
+          <div class="branding-logo-row">
+            <!-- Inline SVG Logo -->
+            <svg viewBox="0 0 48 48" width="38" height="38" fill="none">
+              <circle cx="24" cy="24" r="22" fill="#131317" stroke="rgba(255, 194, 26, 0.25)" stroke-width="1.5"/>
+              <path d="M34.2 29.5c.3-.8.4-1.6.4-2.4 0-3.6-2.9-6.6-6.6-6.6-.7 0-1.4.1-2 .4C24.7 17.6 21.6 15 17.8 15c-4.7 0-8.5 3.8-8.5 8.5 0 .6.1 1.2.2 1.7-2.3.8-3.9 3-3.9 5.6 0 3.3 2.7 6 6 6h22.4c3.4 0 6.2-2.8 6.2-6.2 0-.4 0-.8-.1-1.1h-5.9z" fill="#FF8A1F"/>
+              <path d="M34.8 29.5H19.2c-.4 0-.7-.3-.7-.7 0-.3.2-.6.5-.7l7.8-3.8c.4-.2.8-.2 1.2 0l7.1 3.5c.4.2.6.5.6.9 0 .4-.4.8-.9.8z" fill="#FFC21A"/>
+            </svg>
+            <div>
+              <div class="brand-title">CLOUDFLARE</div>
+              <div class="brand-subtitle">SECURITY OPERATIONS CENTER</div>
+            </div>
+          </div>
+          <p class="branding-desc">
+            High-density real-time monitoring console designed for dual-screen video walls. Live telemetry, zone health, and edge traffic analysis.
+          </p>
+        </div>
+
+        <div class="branding-telemetry">
+          <div class="telemetry-row">
+            <span>SOC WALL TARGET</span>
+            <span class="telemetry-val">1920 × 2160 DUAL</span>
+          </div>
+          <div class="telemetry-row">
+            <span>BEZEL SEAM ALIGNMENT</span>
+            <span class="telemetry-val">Y = 50% ACTIVE</span>
+          </div>
+          <div class="telemetry-row">
+            <span>OPERATIONAL CLOCK</span>
+            <span id="login-clock" class="telemetry-val">00:00:00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Authentication Form -->
+      <div class="login-form-side">
+        <h2 class="form-title">OPERATOR ACCESS</h2>
+        <p class="form-desc">AUTHENTICATE TO ACCESS TELEMETRY CONSOLE</p>
+
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="username">Operator Username</label>
+            <input type="text" id="username" class="form-input" required autofocus autocomplete="username" spellcheck="false" placeholder="operator" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Security Password</label>
+            <input type="password" id="password" class="form-input" required autocomplete="current-password" placeholder="••••••••" />
+          </div>
+
+          <button type="submit" id="submit-btn" class="login-btn">
+            <span>AUTHENTICATE & ENTER</span>
+          </button>
+
+          <div id="login-error-box" class="login-error"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inline Self-Contained JavaScript -->
+  <script>
+    (function() {
+      // 1. Live clock
+      function updateClock() {
+        var clock = document.getElementById('login-clock');
+        if (clock) {
+          var now = new Date();
+          var pad = function(n) { return (n < 10 ? '0' : '') + n; };
+          clock.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+        }
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      // 2. Check if already authenticated
+      fetch('/api/settings', { headers: { 'Accept': 'application/json' } })
+        .then(function(res) {
+          if (res.status === 200) {
+            window.location.replace('/');
+          }
+        })
+        .catch(function() {});
+
+      // 3. Form submit handler
+      var form = document.getElementById('login-form');
+      var usernameInput = document.getElementById('username');
+      var passwordInput = document.getElementById('password');
+      var submitBtn = document.getElementById('submit-btn');
+      var errorBox = document.getElementById('login-error-box');
+
+      function showError(msg) {
+        if (errorBox) {
+          errorBox.textContent = msg;
+          errorBox.style.display = 'block';
+        }
+      }
+
+      function clearError() {
+        if (errorBox) {
+          errorBox.style.display = 'none';
+          errorBox.textContent = '';
+        }
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearError();
+
+        var username = usernameInput.value.trim();
+        var password = passwordInput.value;
+
+        if (!username || !password) {
+          showError('ENTER USERNAME AND PASSWORD');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner"></span><span>AUTHENTICATING...</span>';
+
+        fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ username: username, password: password })
+        })
+        .then(function(res) {
+          if (res.ok) {
+            window.location.replace('/');
+          } else if (res.status >= 400 && res.status < 500) {
+            showError('INVALID CREDENTIALS');
+          } else if (res.status >= 500) {
+            showError('SERVER ERROR — TRY AGAIN LATER');
+          } else {
+            showError('AUTHENTICATION FAILED');
+          }
+        })
+        .catch(function(err) {
+          showError('NETWORK ERROR — CHECK CONNECTION');
+        })
+        .finally(function() {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>AUTHENTICATE & ENTER</span>';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

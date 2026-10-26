@@ -1,0 +1,53 @@
+/**
+ * Base Card Surface Styling
+ */
+.soc-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.soc-card--elevated {
+  background-color: var(--bg-card-elevated);
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-card-elevated);
+}
+
+.soc-card--inset {
+  background-color: var(--bg-card-inset);
+  box-shadow: var(--shadow-inner-glow);
+}
+
+.soc-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.soc-card-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.soc-card-body {
+  padding: 10px 12px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}

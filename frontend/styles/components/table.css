@@ -1,0 +1,109 @@
+/**
+ * Telemetry Rank Tables (TOP PATHS & TOP IPs)
+ * Strictly 10 rows, padded with dimmed '-' and '0' for missing entries.
+ */
+.rank-table-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.rank-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.rank-table-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rank-table-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  min-height: 0;
+  gap: 2px;
+}
+
+.rank-row {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  transition: background-color var(--transition-fast);
+}
+
+.rank-row:hover:not(.rank-row--empty) {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.rank-num {
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.rank-row:nth-child(1) .rank-num {
+  color: var(--accent-amber);
+}
+
+.rank-row:nth-child(2) .rank-num {
+  color: var(--accent-orange);
+}
+
+.rank-row:nth-child(3) .rank-num {
+  color: var(--accent-blue);
+}
+
+.rank-val {
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: ltr;
+}
+
+.rank-count {
+  font-weight: 600;
+  color: var(--accent-amber);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dimmed empty rows */
+.rank-row--empty {
+  opacity: 0.35;
+}
+
+.rank-row--empty .rank-val {
+  color: var(--text-muted);
+}
+
+.rank-row--empty .rank-count {
+  color: var(--text-muted);
+}

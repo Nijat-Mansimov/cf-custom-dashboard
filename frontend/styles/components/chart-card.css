@@ -1,0 +1,110 @@
+/**
+ * Zone Chart Card Component
+ */
+.zone-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  min-height: 0;
+  height: 100%;
+}
+
+.zone-card:hover {
+  border-color: var(--border-medium);
+  background-color: var(--bg-card-hover);
+}
+
+.zone-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.zone-card-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.zone-card-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-size-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.zone-card-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.zone-card-kpi {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.zone-card-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-size-lg);
+  font-weight: 700;
+  color: var(--accent-amber);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.zone-card-delta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.zone-card-delta--up {
+  color: var(--accent-green);
+}
+
+.zone-card-delta--down {
+  color: var(--accent-red);
+}
+
+.zone-card-delta--neutral {
+  color: var(--text-muted);
+}
+
+.zone-card-chart-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.zone-card-chart-wrap canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
